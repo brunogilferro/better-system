@@ -163,7 +163,12 @@ Example: `feat(auth): add password reset flow`
 | `backend-from-schema` + `[existing table]` | Backend for a table that already exists (skips migration) |
 | `database-to-feature` | Project already has a database — generate backend from existing tables |
 | `new-feature` | Creating a complete feature (backend + frontend) |
+| `frontend-from-route` | Backend exists — generate types, service, hook, and page for a route |
+| `create-component` | Creating a reusable UI component without Figma and without a full feature |
 | `write-tests` | Writing tests for backend or frontend code |
+| `refactor` | Adapting existing code to project standards (data flow, tokens, error handling) |
+| `review-file` | Auditing a file against project standards — outputs a structured report |
+| `a11y-review` | Auditing and fixing accessibility issues in a component or page |
 
 ---
 
