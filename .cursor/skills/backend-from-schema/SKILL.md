@@ -30,6 +30,30 @@ If fields are not provided, ask before proceeding.
 
 ---
 
+## Table mode: new vs existing
+
+### New table (default)
+Generates everything including migration:
+```
+backend-from-schema: Product with name, price, stock
+```
+
+### Existing table — skip migration
+Add `[existing table]` to signal the table already exists in the database:
+```
+backend-from-schema: Product [existing table] with name, price, stock
+```
+
+When `[existing table]` is present:
+- **DO NOT generate a migration**
+- Read `apps/backend/database/schema.ts` to confirm the real column names and types
+- Use the actual schema as the source of truth — do not invent fields
+- If `db:pull` models already exist, enhance them instead of recreating
+
+> For a project with many existing tables, prefer the `database-to-feature` skill instead — it is purpose-built for this scenario.
+
+---
+
 ## Step 1 — Load project context
 
 Read these before proceeding:
@@ -212,3 +236,32 @@ export function productTransformer(product: Product) {
 - [ ] Controller is thin (delegates to service)
 - [ ] Routes added to `start/routes.ts`
 - [ ] Auth middleware applied where required
+
+---
+
+## Step 5 — Next step (frontend integration)
+
+After the backend is generated, always inform the user:
+
+---
+
+**Backend for `<entity>` is ready.**
+
+To connect the frontend, choose one of:
+
+**Option A — You have a Figma design:**
+```
+figma-to-next-screen: [Figma link for this screen]
+```
+Generates types, service, hook, components, and page — integrated with the backend just created.
+
+**Option B — No Figma yet:**
+```
+new-feature: frontend for <entity> (backend already exists)
+```
+Generates a functional UI with shadcn, connected to the backend.
+
+**Make sure the backend is running** before generating the frontend so Tuyau updates the API types:
+```bash
+pnpm dev:backend
+```

@@ -159,7 +159,9 @@ Example: `feat(auth): add password reset flow`
 | Skill | Use when |
 |-------|----------|
 | `figma-to-next-screen` | Implementing a screen from Figma |
-| `backend-from-schema` | Creating a new backend resource/entity |
+| `backend-from-schema` | Creating a new backend resource (table doesn't exist yet) |
+| `backend-from-schema` + `[existing table]` | Backend for a table that already exists (skips migration) |
+| `database-to-feature` | Project already has a database — generate backend from existing tables |
 | `new-feature` | Creating a complete feature (backend + frontend) |
 | `write-tests` | Writing tests for backend or frontend code |
 
