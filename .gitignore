@@ -1,5 +1,7 @@
-frontend/node_modules
-backend/node_modules
+apps/frontend/node_modules
+apps/frontend/.next
+apps/backend/node_modules
+apps/backend/tmp/db.sqlite3
 node_modules
-
 .DS_Store
+.env
