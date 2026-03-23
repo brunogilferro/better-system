@@ -29,6 +29,9 @@ You MUST read and follow these files before generating any code:
 | `docs/figma-design-rules.md` | Project colors, fonts, visual identity (project-specific) |
 | `docs/components-registry.md` | Which components exist and how to use them |
 | `docs/data-pattern.md` | Data flow: Component → Hook → Service → API |
+| `docs/api-conventions.md` | API response format, status codes, pagination |
+| `docs/error-handling.md` | How to handle and display errors (frontend + backend) |
+| `docs/state-management.md` | When to use useState / useReducer / Context / Zustand |
 
 ---
 
@@ -77,7 +80,8 @@ Never create a component that already exists.
 - Keep controllers thin — delegate to services
 - Use validators for all input (`app/validators/`)
 - Use transformers to serialize responses (`app/transformers/`)
-- All responses are wrapped: `{ data: ... }`
+- All responses wrapped via `ctx.serialize()` → `{ data: ... }`
+- See `docs/api-conventions.md` for full response format and patterns
 
 ---
 
@@ -103,10 +107,12 @@ apps/frontend/
 ├── components/
 │   ├── ui/            # shadcn/ui installed components (do not modify structure)
 │   └── *.tsx          # Custom components built on top of shadcn
+├── context/           # React Context providers
+├── store/             # Zustand stores (only when needed)
 ├── hooks/             # Client-side data hooks
-├── services/          # API service functions
+├── services/          # API service functions (use Tuyau client from lib/api.ts)
 ├── types/             # TypeScript domain types
-└── lib/               # Utilities and helpers
+└── lib/               # Utilities, helpers (api.ts, parse-error.ts, etc.)
 ```
 
 ---
@@ -114,10 +120,48 @@ apps/frontend/
 ## Data Flow
 
 ```
-Component → Hook → Service → API
+Component → Hook → Service → API (via lib/api.ts Tuyau client)
 ```
 
 Server Components may call services directly (no hooks needed).
+
+---
+
+## Error Handling
+
+All errors must be handled consistently — see `docs/error-handling.md`.
+Never let errors fail silently. Always give the user feedback.
+
+---
+
+## Accessibility
+
+Every component must meet basic a11y standards — see `.cursor/rules/accessibility.mdc`.
+
+Key rules:
+- All inputs must have visible labels
+- Icon-only buttons must have `aria-label`
+- Never remove focus rings
+
+---
+
+## Commits
+
+Follow Conventional Commits format — see `.cursor/rules/commits.mdc`.
+
+Pattern: `<type>(<scope>): <description>`
+Example: `feat(auth): add password reset flow`
+
+---
+
+## Skills available
+
+| Skill | Use when |
+|-------|----------|
+| `figma-to-next-screen` | Implementing a screen from Figma |
+| `backend-from-schema` | Creating a new backend resource/entity |
+| `new-feature` | Creating a complete feature (backend + frontend) |
+| `write-tests` | Writing tests for backend or frontend code |
 
 ---
 

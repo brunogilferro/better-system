@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { Inter } from "next/font/google"
 // __HEADING_FONT_IMPORT__
+import { Providers } from "./providers"
 import { TooltipProvider } from "@/components/ui/tooltip"
 import "./globals.css"
 
@@ -23,7 +24,9 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${bodyFont.variable} __HEADING_FONT_CLASS__ h-full antialiased`}>
       <body className="min-h-full flex flex-col">
-        <TooltipProvider>{children}</TooltipProvider>
+        <Providers>
+          <TooltipProvider>{children}</TooltipProvider>
+        </Providers>
       </body>
     </html>
   )
