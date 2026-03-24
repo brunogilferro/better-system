@@ -109,6 +109,17 @@ Before writing any code, translate all identifiers to English:
 
 > **Portuguese (or any non-English) is only allowed inside `columnName` strings.**
 
+**Avoid redundant suffixes** — if removing the suffix still leaves a clear name, remove it:
+
+| ❌ Verbose | ✅ Concise |
+|---|---|
+| `listForUser(userId)` | `list(userId)` |
+| `findForUser(id, userId)` | `find(id, userId)` |
+| `ProjectListRow` | `Projects` |
+| `ProjectDetailRow` | `Project` |
+| `TableContext` | `TableEntry` |
+| `globalRolesRows` | `rolesResult` |
+
 ### 1. Model (review or create)
 
 If `db:pull` already generated the model:

@@ -177,6 +177,17 @@ declare codigoProjeto: number
 const ROLE_MAP = { lider_projeto: 'project_leader', jogador: 'player' }
 ```
 
+**Avoid redundant suffixes** — if removing the suffix still leaves a clear name, remove it:
+
+| ❌ Verbose | ✅ Concise |
+|---|---|
+| `listForUser(userId)` | `list(userId)` |
+| `findForUser(id, userId)` | `find(id, userId)` |
+| `ProjectListRow` | `Projects` |
+| `ProjectDetailRow` | `Project` |
+| `TableContext` | `TableEntry` |
+| `globalRolesRows` | `rolesResult` |
+
 ---
 
 ## Rules

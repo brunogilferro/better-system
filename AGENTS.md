@@ -181,12 +181,31 @@ Example: `feat(auth): add password reset flow`
 | Files | `snake_case` English | `table_participant.ts`, `me_context_controller.ts` |
 | Classes | `PascalCase` English | `class Table`, `class TableParticipant` |
 | Variables / functions | `camelCase` English | `projectId`, `findByEmail()` |
-| Types / interfaces | `PascalCase` English | `type TableRole`, `interface ProjectContext` |
+| Types / interfaces | `PascalCase` English | `type TableRole`, `interface TableEntry` |
 | API response keys | `camelCase` English | `{ projectId, tableName, tableRole }` |
 | DB column mapping | Source language stays in `columnName` only | `@column({ columnName: 'CodigoProjeto' })` |
 | Enum/lookup values (from DB) | Map source-language codes to English in the API layer | `lider_projeto` → `project_leader` |
 
 **Non-English strings are only allowed inside `columnName` values** — the bridge between English code and an existing non-English database schema.
+
+### Naming conciseness
+
+Avoid redundant suffixes and qualifiers — the surrounding context already provides the information:
+
+| ❌ Verbose | ✅ Concise | Why |
+|---|---|---|
+| `listForUser(userId)` | `list(userId)` | param already says it's scoped to a user |
+| `findForUser(id, userId)` | `find(id, userId)` | same |
+| `listTablesForProject(id, userId)` | `listTables(id, userId)` | class name provides context |
+| `ProjectListRow` | `Projects` | it's a list of projects, "Row" is noise |
+| `ProjectDetailRow` | `Project` | singular = detail |
+| `TableListRow` | `Tables` | same as above |
+| `TableContext` | `TableEntry` | "Context" doesn't add meaning |
+| `ProjectContext` | `ProjectEntry` | same |
+| `globalRolesRows` | `rolesResult` | drop the `Rows` suffix from variables |
+| `tablesRows` | `tablesResult` | same |
+
+Rule: if removing the suffix still leaves a clear name, remove it.
 
 ---
 
