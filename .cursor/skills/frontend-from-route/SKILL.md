@@ -42,9 +42,28 @@ Read these before proceeding:
 - `docs/data-pattern.md` — Component → Hook → Service → API flow
 - `docs/api-conventions.md` — response format `{ data: ... }`
 - `docs/error-handling.md` — how to handle and display errors
+- `docs/state-management.md` — when to use Context vs Zustand vs local state
 - `docs/components-registry.md` — available components to reuse
 - `apps/backend/start/routes.ts` — confirm the routes exist and their paths
 - `apps/backend/app/transformers/` — read the transformer to know the exact response shape
+
+### Auth routes — special case
+
+If the resource is **authentication** (login, logout, session, current user), you MUST also generate:
+
+1. **`context/auth-context.tsx`** — `AuthProvider` + `useAuth` hook
+   - Stores `user` and `token` in state
+   - Initializes from `localStorage` on mount
+   - Exposes `login(token, user)`, `logout()`, `isAuthenticated`
+   - Wraps the app in `app/providers.tsx`
+
+2. **`hooks/useAuth.ts`** — mutation hooks that call the service AND update the AuthContext
+   - `onSuccess`: call `auth.login(token, user)` from context, then `router.push(...)`
+   - `onError`: expose `errorMessage` via `parseApiError`
+
+3. **Protected route middleware** — check `context/auth-context.tsx` in layouts to redirect unauthenticated users
+
+Never store the token only in `localStorage` without a matching React context — components won't react to auth state changes.
 
 > **Important**: The Tuyau client at `lib/api.ts` is auto-generated from the backend routes.
 > Make sure the backend is running (`pnpm dev:backend`) so Tuyau types are up to date before implementing.
