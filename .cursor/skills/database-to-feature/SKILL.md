@@ -94,6 +94,21 @@ Remove routes the user doesn't need.
 
 Generate files in this exact order:
 
+### 0. Naming — ALWAYS English
+
+Before writing any code, translate all identifiers to English:
+
+| What | Rule | Example |
+|------|------|---------|
+| File name | `snake_case` English | `table_participant.ts` |
+| Class name | `PascalCase` English | `class TableParticipant` |
+| Property names | `camelCase` English | `declare projectId: number` |
+| JSON response keys | `camelCase` English | `{ projectId, tableName }` |
+| DB column names | Keep as-is in `columnName` only | `columnName: 'CodigoProjeto'` |
+| Lookup/enum values | Map to English in API layer | `lider_projeto` → `project_leader` |
+
+> **Portuguese (or any non-English) is only allowed inside `columnName` strings.**
+
 ### 1. Model (review or create)
 
 If `db:pull` already generated the model:
@@ -101,6 +116,7 @@ If `db:pull` already generated the model:
 - Add relationships (`belongsTo`, `hasMany`, etc.)
 - Add computed properties if useful
 - Do NOT recreate from scratch — enhance what's there
+- Rename any non-English property names to English (keeping `columnName`)
 
 If model doesn't exist yet:
 - Create `apps/backend/app/models/<entity>.ts`
@@ -151,6 +167,9 @@ If model doesn't exist yet:
 - [ ] `store` validator aligns with DB constraints (nullable → optional)
 - [ ] Routes added without conflicting with existing ones
 - [ ] Controller is thin — no business logic
+- [ ] All identifiers (file, class, properties, JSON keys) are in English
+- [ ] Non-English DB column names are only inside `columnName` strings
+- [ ] Non-English enum/lookup values are mapped to English before leaving the API
 
 ---
 

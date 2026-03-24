@@ -172,6 +172,24 @@ Example: `feat(auth): add password reset flow`
 
 ---
 
+## Naming Conventions
+
+**All identifiers must be in English** — file names, class names, function names, variable names, type names, interface names, route names, JSON response keys.
+
+| Layer | Rule | Example |
+|-------|------|---------|
+| Files | `snake_case` English | `table_participant.ts`, `me_context_controller.ts` |
+| Classes | `PascalCase` English | `class Table`, `class TableParticipant` |
+| Variables / functions | `camelCase` English | `projectId`, `findByEmail()` |
+| Types / interfaces | `PascalCase` English | `type TableRole`, `interface ProjectContext` |
+| API response keys | `camelCase` English | `{ projectId, tableName, tableRole }` |
+| DB column mapping | Source language stays in `columnName` only | `@column({ columnName: 'CodigoProjeto' })` |
+| Enum/lookup values (from DB) | Map source-language codes to English in the API layer | `lider_projeto` → `project_leader` |
+
+**Non-English strings are only allowed inside `columnName` values** — the bridge between English code and an existing non-English database schema.
+
+---
+
 ## Enforcement
 
 - If a component exists in the registry → use it, do not recreate

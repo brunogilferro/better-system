@@ -149,6 +149,8 @@ Generate files in this exact order:
 
 ## Naming Conventions
 
+**All identifiers must be in English** — no exceptions for file names, class names, variable names, types, or JSON keys.
+
 | Layer | Pattern | Example |
 |-------|---------|---------|
 | Migration | `<timestamp>_create_<table>_table.ts` | `1234_create_products_table.ts` |
@@ -158,6 +160,22 @@ Generate files in this exact order:
 | Service | `<entity>_service.ts` | `product_service.ts` |
 | Controller | `<entity>_controller.ts` | `product_controller.ts` |
 | Route prefix | `/<entities>` (plural kebab-case) | `/products` |
+
+**If the database schema uses non-English column names**, keep the source language only inside `columnName`:
+```ts
+// ✅ correct
+@column({ columnName: 'CodigoProjeto' })
+declare projectId: number
+
+// ❌ wrong
+@column({ columnName: 'CodigoProjeto' })
+declare codigoProjeto: number
+```
+
+**If lookup/enum values from the DB are non-English**, map them to English in the API layer — never expose the raw DB codes in responses:
+```ts
+const ROLE_MAP = { lider_projeto: 'project_leader', jogador: 'player' }
+```
 
 ---
 
