@@ -195,6 +195,11 @@ export default async function ProductsPage() {
 - Client components use hooks
 - Error handling follows `docs/error-handling.md` — never silent errors
 - No hardcoded colors or arbitrary Tailwind values
+- Forms MUST use `react-hook-form` + `zod` + `@hookform/resolvers`
+  - Define a Zod schema for all form fields
+  - Add `noValidate` to `<form>` to disable HTML5 native validation
+  - Field errors: `<p className="text-xs text-destructive">{error.message}</p>` below each input
+  - API errors: `<Alert variant="destructive">` at the top of the form
 
 ---
 
@@ -207,6 +212,8 @@ export default async function ProductsPage() {
 - [ ] Page is a Server Component by default
 - [ ] Error handling follows `docs/error-handling.md`
 - [ ] No hardcoded colors or arbitrary Tailwind values
+- [ ] Forms use `react-hook-form` + `zod` with `noValidate` on the `<form>` element
+- [ ] Field errors shown inline, API errors in `<Alert variant="destructive">`
 
 ---
 
