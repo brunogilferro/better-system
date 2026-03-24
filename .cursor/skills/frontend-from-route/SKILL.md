@@ -52,18 +52,26 @@ Read these before proceeding:
 If the resource is **authentication** (login, logout, session, current user), you MUST also generate:
 
 1. **`context/auth-context.tsx`** — `AuthProvider` + `useAuth` hook
-   - Stores `user` and `token` in state
-   - Initializes from `localStorage` on mount
+   - Stores `user` and `token` in **React state**
+   - Persists token in **cookies** (NOT localStorage) — required so `proxy.ts` (server-side) can read it
+   - Cookie names: `auth_token` and `auth_user`
+   - Initializes from cookies on mount (`document.cookie`)
    - Exposes `login(token, user)`, `logout()`, `isAuthenticated`
    - Wraps the app in `app/providers.tsx`
 
 2. **`hooks/useAuth.ts`** — mutation hooks that call the service AND update the AuthContext
-   - `onSuccess`: call `auth.login(token, user)` from context, then `router.push(...)`
+   - `onSuccess`: call `auth.login(token, user)` from context, then `router.push('/')` (home/dashboard)
    - `onError`: expose `errorMessage` via `parseApiError`
 
-3. **Protected route middleware** — check `context/auth-context.tsx` in layouts to redirect unauthenticated users
+3. **`proxy.ts`** (NOT `middleware.ts` — deprecated in Next.js 16) — route protection
+   - Export function named `proxy` (not `middleware`)
+   - Reads token from `request.cookies.get('auth_token')`
+   - Unauthenticated on protected route → redirect to `/login`
+   - Authenticated on `/login` → redirect to `/`
+   - Export `config.matcher` to exclude static assets
 
-Never store the token only in `localStorage` without a matching React context — components won't react to auth state changes.
+Never store the token only in cookies without a matching React context — components won't react to auth state changes.
+Never use `middleware.ts` — Next.js 16 uses `proxy.ts` with `export function proxy`.
 
 > **Important**: The Tuyau client at `lib/api.ts` is auto-generated from the backend routes.
 > Make sure the backend is running (`pnpm dev:backend`) so Tuyau types are up to date before implementing.
