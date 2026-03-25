@@ -100,14 +100,25 @@ Before writing any code, translate all identifiers to English:
 
 | What | Rule | Example |
 |------|------|---------|
-| File name | `snake_case` English | `table_participant.ts` |
-| Class name | `PascalCase` English | `class TableParticipant` |
+| File name | `snake_case` English, reflecting DB hierarchy | `project_table.ts`, `project_table_participant.ts` |
+| Class name | `PascalCase` English, reflecting DB hierarchy | `class ProjectTable`, `class ProjectTableParticipant` |
 | Property names | `camelCase` English | `declare projectId: number` |
 | JSON response keys | `camelCase` English | `{ projectId, tableName }` |
 | DB column names | Keep as-is in `columnName` only | `columnName: 'CodigoProjeto'` |
 | Lookup/enum values | Map to English in API layer | `lider_projeto` → `project_leader` |
 
 > **Portuguese (or any non-English) is only allowed inside `columnName` strings.**
+
+**Entity naming must mirror the DB table hierarchy.** DB table names encode parent-child relationships through prefixes — translate each segment to English and keep the full prefix chain:
+
+| DB table | File | Class | Raw query type |
+|---|---|---|---|
+| `Projetos` | `project.ts` | `Project` | `Projects` / `Project` |
+| `Projetos_Mesas` | `project_table.ts` | `ProjectTable` | `ProjectTables` |
+| `Projetos_Mesas_Participantes` | `project_table_participant.ts` | `ProjectTableParticipant` | `ProjectTableParticipants` |
+| `Projetos_Mesas_Maos` | `project_table_hand.ts` | `ProjectTableHand` | `ProjectTableHands` |
+
+Never abbreviate or drop the parent context from the name.
 
 **Avoid redundant suffixes** — if removing the suffix still leaves a clear name, remove it:
 
@@ -152,6 +163,20 @@ If model doesn't exist yet:
 - Location: `apps/backend/app/services/<entity>_service.ts`
 - Methods: `index`, `show`, `store`, `update`, `destroy`
 - No HTTP logic — pure business logic only
+
+**rawQuery vs Lucid in services:**
+
+Use Lucid ORM by default. Only use `db.rawQuery` when the query requires:
+- Role derivation via FK boolean checks (`(p."CodigoLider" = ?) AS is_leader`)
+- `COUNT DISTINCT` with `GROUP BY`
+- `EXISTS` subqueries for access checks
+- Complex `OR` conditions across multiple joined tables
+
+When using rawQuery:
+- Add a JSDoc comment explaining why Lucid is insufficient
+- Extract repeated SQL fragments as named string constants
+- Type the result with `QueryResult<T>` from `#types/raw_query`
+- Convert snake_case rows to camelCase inside `.map()` immediately after the query
 
 ### 5. Controller
 

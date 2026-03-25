@@ -77,6 +77,18 @@ Read all of these before proceeding:
 
 ## Step 3 — Backend Implementation
 
+### Naming — always check hierarchy first
+
+Before naming any file or class, check if the entity is a child of another table. Entity names must mirror the DB table hierarchy — translate each segment to English and keep the full parent prefix:
+
+| DB table | File | Class |
+|---|---|---|
+| `Projetos` | `project.ts` | `Project` |
+| `Projetos_Mesas` | `project_table.ts` | `ProjectTable` |
+| `Projetos_Mesas_Participantes` | `project_table_participant.ts` | `ProjectTableParticipant` |
+
+Never abbreviate or drop the parent context from the name.
+
 Follow the exact order from `backend-from-schema` skill:
 
 1. Migration

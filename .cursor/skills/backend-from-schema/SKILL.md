@@ -133,6 +133,20 @@ Generate files in this exact order:
 - Methods: `index`, `show`, `store`, `update`, `destroy`
 - No HTTP logic — pure business logic only
 
+**rawQuery vs Lucid in services:**
+
+Use Lucid ORM by default. Only use `db.rawQuery` when the query requires:
+- Role derivation via FK boolean checks (`(p."CodigoLider" = ?) AS is_leader`)
+- `COUNT DISTINCT` with `GROUP BY`
+- `EXISTS` subqueries for access checks
+- Complex `OR` conditions across multiple joined tables
+
+When using rawQuery:
+- Add a JSDoc comment explaining why Lucid is insufficient
+- Extract repeated SQL fragments as named string constants
+- Type the result with `QueryResult<T>` from `#types/raw_query`
+- Convert snake_case rows to camelCase inside `.map()` immediately after the query
+
 ### 6. Controller
 - Location: `apps/backend/app/controllers/<entity>_controller.ts`
 - Thin — delegates everything to the service
@@ -154,12 +168,20 @@ Generate files in this exact order:
 | Layer | Pattern | Example |
 |-------|---------|---------|
 | Migration | `<timestamp>_create_<table>_table.ts` | `1234_create_products_table.ts` |
-| Model | `<Entity>.ts` (singular PascalCase) | `Product.ts` |
+| Model | `<Entity>.ts` reflecting DB hierarchy | `project_table.ts` → `class ProjectTable` |
 | Validator | `<entity>.ts` | `product.ts` |
 | Transformer | `<entity>_transformer.ts` | `product_transformer.ts` |
 | Service | `<entity>_service.ts` | `product_service.ts` |
 | Controller | `<entity>_controller.ts` | `product_controller.ts` |
 | Route prefix | `/<entities>` (plural kebab-case) | `/products` |
+
+**Entity naming must mirror the DB table hierarchy.** Translate each segment to English and keep the full prefix chain — never abbreviate or drop parent context:
+
+| DB table | File | Class | Raw query type |
+|---|---|---|---|
+| `Projetos` | `project.ts` | `Project` | `Projects` / `Project` |
+| `Projetos_Mesas` | `project_table.ts` | `ProjectTable` | `ProjectTables` |
+| `Projetos_Mesas_Participantes` | `project_table_participant.ts` | `ProjectTableParticipant` | `ProjectTableParticipants` |
 
 **If the database schema uses non-English column names**, keep the source language only inside `columnName`:
 ```ts
