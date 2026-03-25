@@ -1,5 +1,5 @@
 export const controllers = {
-  AccessToken: () => import('#controllers/access_token_controller'),
+  Auth: () => import('#controllers/auth_controller'),
+  Account: () => import('#controllers/account_controller'),
   NewAccount: () => import('#controllers/new_account_controller'),
-  Profile: () => import('#controllers/profile_controller'),
 }
