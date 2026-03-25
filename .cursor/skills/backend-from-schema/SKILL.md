@@ -144,7 +144,8 @@ Use Lucid ORM by default. Only use `db.rawQuery` when the query requires:
 When using rawQuery:
 - Add a JSDoc comment explaining why Lucid is insufficient
 - Extract repeated SQL fragments as named string constants
-- Type the result with `QueryResult<T>` from `#types/raw_query`
+- Create a row type in `app/types/db_rows/<entity>.ts` and import via `#types/db_rows/<entity>`
+- Import `QueryResult<T>` from `#types/db_rows/shared`
 - Convert snake_case rows to camelCase inside `.map()` immediately after the query
 
 ### 6. Controller
