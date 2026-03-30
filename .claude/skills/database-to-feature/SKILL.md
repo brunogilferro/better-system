@@ -94,43 +94,6 @@ Remove routes the user doesn't need.
 
 Generate files in this exact order:
 
-### 0. Naming — ALWAYS English
-
-Before writing any code, translate all identifiers to English:
-
-| What | Rule | Example |
-|------|------|---------|
-| File name | `snake_case` English, reflecting DB hierarchy | `project_table.ts`, `project_table_participant.ts` |
-| Class name | `PascalCase` English, reflecting DB hierarchy | `class ProjectTable`, `class ProjectTableParticipant` |
-| Property names | `camelCase` English | `declare projectId: number` |
-| JSON response keys | `camelCase` English | `{ projectId, tableName }` |
-| DB column names | Keep as-is in `columnName` only | `columnName: 'CodigoProjeto'` |
-| Lookup/enum values | Map to English in API layer | `lider_projeto` → `project_leader` |
-
-> **Portuguese (or any non-English) is only allowed inside `columnName` strings.**
-
-**Entity naming must mirror the DB table hierarchy.** DB table names encode parent-child relationships through prefixes — translate each segment to English and keep the full prefix chain:
-
-| DB table | File | Class | Raw query type |
-|---|---|---|---|
-| `Projetos` | `project.ts` | `Project` | `Projects` / `Project` |
-| `Projetos_Mesas` | `project_table.ts` | `ProjectTable` | `ProjectTables` |
-| `Projetos_Mesas_Participantes` | `project_table_participant.ts` | `ProjectTableParticipant` | `ProjectTableParticipants` |
-| `Projetos_Mesas_Maos` | `project_table_hand.ts` | `ProjectTableHand` | `ProjectTableHands` |
-
-Never abbreviate or drop the parent context from the name.
-
-**Avoid redundant suffixes** — if removing the suffix still leaves a clear name, remove it:
-
-| ❌ Verbose | ✅ Concise |
-|---|---|
-| `listForUser(userId)` | `list(userId)` |
-| `findForUser(id, userId)` | `find(id, userId)` |
-| `ProjectListRow` | `Projects` |
-| `ProjectDetailRow` | `Project` |
-| `TableContext` | `TableEntry` |
-| `globalRolesRows` | `rolesResult` |
-
 ### 1. Model (review or create)
 
 If `db:pull` already generated the model:
@@ -138,7 +101,6 @@ If `db:pull` already generated the model:
 - Add relationships (`belongsTo`, `hasMany`, etc.)
 - Add computed properties if useful
 - Do NOT recreate from scratch — enhance what's there
-- Rename any non-English property names to English (keeping `columnName`)
 
 If model doesn't exist yet:
 - Create `apps/backend/app/models/<entity>.ts`
@@ -163,21 +125,6 @@ If model doesn't exist yet:
 - Location: `apps/backend/app/services/<entity>_service.ts`
 - Methods: `index`, `show`, `store`, `update`, `destroy`
 - No HTTP logic — pure business logic only
-
-**rawQuery vs Lucid in services:**
-
-Use Lucid ORM by default. Only use `db.rawQuery` when the query requires:
-- Role derivation via FK boolean checks (`(p."CodigoLider" = ?) AS is_leader`)
-- `COUNT DISTINCT` with `GROUP BY`
-- `EXISTS` subqueries for access checks
-- Complex `OR` conditions across multiple joined tables
-
-When using rawQuery:
-- Add a JSDoc comment explaining why Lucid is insufficient
-- Extract repeated SQL fragments as named string constants
-- Create a row type in `app/types/db_rows/<entity>.ts` and import via `#types/db_rows/<entity>`
-- Import `QueryResult<T>` from `#types/db_rows/shared`
-- Convert snake_case rows to camelCase inside `.map()` immediately after the query
 
 ### 5. Controller
 
@@ -204,9 +151,6 @@ When using rawQuery:
 - [ ] `store` validator aligns with DB constraints (nullable → optional)
 - [ ] Routes added without conflicting with existing ones
 - [ ] Controller is thin — no business logic
-- [ ] All identifiers (file, class, properties, JSON keys) are in English
-- [ ] Non-English DB column names are only inside `columnName` strings
-- [ ] Non-English enum/lookup values are mapped to English before leaving the API
 
 ---
 

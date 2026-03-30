@@ -32,7 +32,7 @@ Read the target file(s) and all applicable docs:
 | `docs/figma-design-rules.md` | Reviewing components, pages (style tokens) |
 | `docs/components-registry.md` | Reviewing components |
 | `docs/state-management.md` | Reviewing hooks, context, stores |
-| `.cursor/rules/accessibility.mdc` | Reviewing components, pages |
+| `.claude/rules/accessibility.mdc` | Reviewing components, pages |
 
 ---
 

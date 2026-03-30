@@ -42,36 +42,9 @@ Read these before proceeding:
 - `docs/data-pattern.md` — Component → Hook → Service → API flow
 - `docs/api-conventions.md` — response format `{ data: ... }`
 - `docs/error-handling.md` — how to handle and display errors
-- `docs/state-management.md` — when to use Context vs Zustand vs local state
 - `docs/components-registry.md` — available components to reuse
 - `apps/backend/start/routes.ts` — confirm the routes exist and their paths
 - `apps/backend/app/transformers/` — read the transformer to know the exact response shape
-
-### Auth routes — special case
-
-If the resource is **authentication** (login, logout, session, current user), you MUST also generate:
-
-1. **`context/auth-context.tsx`** — `AuthProvider` + `useAuth` hook
-   - Stores `user` and `token` in **React state**
-   - Persists token in **cookies** (NOT localStorage) — required so `proxy.ts` (server-side) can read it
-   - Cookie names: `auth_token` and `auth_user`
-   - Initializes from cookies on mount (`document.cookie`)
-   - Exposes `login(token, user)`, `logout()`, `isAuthenticated`
-   - Wraps the app in `app/providers.tsx`
-
-2. **`hooks/useAuth.ts`** — mutation hooks that call the service AND update the AuthContext
-   - `onSuccess`: call `auth.login(token, user)` from context, then `router.push('/')` (home/dashboard)
-   - `onError`: expose `errorMessage` via `parseApiError`
-
-3. **`proxy.ts`** (NOT `middleware.ts` — deprecated in Next.js 16) — route protection
-   - Export function named `proxy` (not `middleware`)
-   - Reads token from `request.cookies.get('auth_token')`
-   - Unauthenticated on protected route → redirect to `/login`
-   - Authenticated on `/login` → redirect to `/`
-   - Export `config.matcher` to exclude static assets
-
-Never store the token only in cookies without a matching React context — components won't react to auth state changes.
-Never use `middleware.ts` — Next.js 16 uses `proxy.ts` with `export function proxy`.
 
 > **Important**: The Tuyau client at `lib/api.ts` is auto-generated from the backend routes.
 > Make sure the backend is running (`pnpm dev:backend`) so Tuyau types are up to date before implementing.
@@ -222,11 +195,6 @@ export default async function ProductsPage() {
 - Client components use hooks
 - Error handling follows `docs/error-handling.md` — never silent errors
 - No hardcoded colors or arbitrary Tailwind values
-- Forms MUST use `react-hook-form` + `zod` + `@hookform/resolvers`
-  - Define a Zod schema for all form fields
-  - Add `noValidate` to `<form>` to disable HTML5 native validation
-  - Field errors: `<p className="text-xs text-destructive">{error.message}</p>` below each input
-  - API errors: `<Alert variant="destructive">` at the top of the form
 
 ---
 
@@ -239,8 +207,6 @@ export default async function ProductsPage() {
 - [ ] Page is a Server Component by default
 - [ ] Error handling follows `docs/error-handling.md`
 - [ ] No hardcoded colors or arbitrary Tailwind values
-- [ ] Forms use `react-hook-form` + `zod` with `noValidate` on the `<form>` element
-- [ ] Field errors shown inline, API errors in `<Alert variant="destructive">`
 
 ---
 

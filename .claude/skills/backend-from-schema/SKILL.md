@@ -133,21 +133,6 @@ Generate files in this exact order:
 - Methods: `index`, `show`, `store`, `update`, `destroy`
 - No HTTP logic — pure business logic only
 
-**rawQuery vs Lucid in services:**
-
-Use Lucid ORM by default. Only use `db.rawQuery` when the query requires:
-- Role derivation via FK boolean checks (`(p."CodigoLider" = ?) AS is_leader`)
-- `COUNT DISTINCT` with `GROUP BY`
-- `EXISTS` subqueries for access checks
-- Complex `OR` conditions across multiple joined tables
-
-When using rawQuery:
-- Add a JSDoc comment explaining why Lucid is insufficient
-- Extract repeated SQL fragments as named string constants
-- Create a row type in `app/types/db_rows/<entity>.ts` and import via `#types/db_rows/<entity>`
-- Import `QueryResult<T>` from `#types/db_rows/shared`
-- Convert snake_case rows to camelCase inside `.map()` immediately after the query
-
 ### 6. Controller
 - Location: `apps/backend/app/controllers/<entity>_controller.ts`
 - Thin — delegates everything to the service
@@ -164,52 +149,15 @@ When using rawQuery:
 
 ## Naming Conventions
 
-**All identifiers must be in English** — no exceptions for file names, class names, variable names, types, or JSON keys.
-
 | Layer | Pattern | Example |
 |-------|---------|---------|
 | Migration | `<timestamp>_create_<table>_table.ts` | `1234_create_products_table.ts` |
-| Model | `<Entity>.ts` reflecting DB hierarchy | `project_table.ts` → `class ProjectTable` |
+| Model | `<Entity>.ts` (singular PascalCase) | `Product.ts` |
 | Validator | `<entity>.ts` | `product.ts` |
 | Transformer | `<entity>_transformer.ts` | `product_transformer.ts` |
 | Service | `<entity>_service.ts` | `product_service.ts` |
 | Controller | `<entity>_controller.ts` | `product_controller.ts` |
 | Route prefix | `/<entities>` (plural kebab-case) | `/products` |
-
-**Entity naming must mirror the DB table hierarchy.** Translate each segment to English and keep the full prefix chain — never abbreviate or drop parent context:
-
-| DB table | File | Class | Raw query type |
-|---|---|---|---|
-| `Projetos` | `project.ts` | `Project` | `Projects` / `Project` |
-| `Projetos_Mesas` | `project_table.ts` | `ProjectTable` | `ProjectTables` |
-| `Projetos_Mesas_Participantes` | `project_table_participant.ts` | `ProjectTableParticipant` | `ProjectTableParticipants` |
-
-**If the database schema uses non-English column names**, keep the source language only inside `columnName`:
-```ts
-// ✅ correct
-@column({ columnName: 'CodigoProjeto' })
-declare projectId: number
-
-// ❌ wrong
-@column({ columnName: 'CodigoProjeto' })
-declare codigoProjeto: number
-```
-
-**If lookup/enum values from the DB are non-English**, map them to English in the API layer — never expose the raw DB codes in responses:
-```ts
-const ROLE_MAP = { lider_projeto: 'project_leader', jogador: 'player' }
-```
-
-**Avoid redundant suffixes** — if removing the suffix still leaves a clear name, remove it:
-
-| ❌ Verbose | ✅ Concise |
-|---|---|
-| `listForUser(userId)` | `list(userId)` |
-| `findForUser(id, userId)` | `find(id, userId)` |
-| `ProjectListRow` | `Projects` |
-| `ProjectDetailRow` | `Project` |
-| `TableContext` | `TableEntry` |
-| `globalRolesRows` | `rolesResult` |
 
 ---
 

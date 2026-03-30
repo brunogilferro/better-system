@@ -22,13 +22,13 @@ If unclear, ask:
 
 Read before proceeding:
 - The target file(s)
-- `.cursor/rules/accessibility.mdc` — the full a11y ruleset for this project
+- `.claude/rules/accessibility.mdc` — the full a11y ruleset for this project
 
 ---
 
 ## Step 2 — Audit
 
-Read the file carefully. Check every rule from `.cursor/rules/accessibility.mdc`.
+Read the file carefully. Check every rule from `.claude/rules/accessibility.mdc`.
 
 Classify each issue by impact:
 

@@ -87,15 +87,6 @@ After the Architecture Plan is fully written:
 - Place under `components/` or `components/<feature>/`
 - The page file only composes layout and imports components
 
-### Forms
-
-- ALWAYS use `react-hook-form` + `zod` + `@hookform/resolvers` for any form
-- Define a Zod schema for all form fields
-- Use `zodResolver` in `useForm`
-- Add `noValidate` to `<form>` to disable HTML5 native validation
-- Show field errors inline below the input: `<p className="text-xs text-destructive">{error.message}</p>`
-- Show API/submission errors at the top of the form using `<Alert variant="destructive">`
-
 ---
 
 ## Step 6 — Refinement
@@ -119,5 +110,3 @@ After generating code:
 - [ ] Hover, focus-visible, active states implemented
 - [ ] Implementation compared against Figma screenshot
 - [ ] No arbitrary Tailwind values used
-- [ ] Forms use `react-hook-form` + `zod` with `noValidate` on the `<form>` element
-- [ ] Field errors shown inline below input, API errors in `<Alert variant="destructive">`
