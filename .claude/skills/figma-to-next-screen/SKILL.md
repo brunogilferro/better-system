@@ -110,3 +110,6 @@ After generating code:
 - [ ] Hover, focus-visible, active states implemented
 - [ ] Implementation compared against Figma screenshot
 - [ ] No arbitrary Tailwind values used
+- [ ] Layout-affecting client preferences use cookie-based SSR (see `apps/frontend/CLAUDE.md` § "Layout Shift Prevention")
+- [ ] Async-dependent UI shows skeletons while loading — no flash of wrong content
+- [ ] Animation-gated visibility uses `onTransitionEnd`, not `setTimeout`

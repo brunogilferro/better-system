@@ -134,6 +134,8 @@ Rules:
 - [ ] Components use shadcn + design tokens
 - [ ] No hardcoded colors or arbitrary Tailwind values
 - [ ] Error handling follows `docs/error-handling.md`
+- [ ] Layout-affecting client preferences use cookie-based SSR (see `apps/frontend/CLAUDE.md` § "Layout Shift Prevention")
+- [ ] Async-dependent UI shows skeletons while loading — no flash of wrong content
 
 ---
 

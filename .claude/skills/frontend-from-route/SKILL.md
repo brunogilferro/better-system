@@ -195,6 +195,8 @@ export default async function ProductsPage() {
 - Client components use hooks
 - Error handling follows `docs/error-handling.md` — never silent errors
 - No hardcoded colors or arbitrary Tailwind values
+- Layout shift prevention: if the page has client preferences that affect layout (e.g. collapsed panels), use cookie-based SSR — see `apps/frontend/CLAUDE.md` § "Layout Shift Prevention"
+- Show skeleton placeholders while async data loads — never render a "guess" that will change after fetch
 
 ---
 

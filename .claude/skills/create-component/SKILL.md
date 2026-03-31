@@ -112,6 +112,9 @@ export function StatCard({ label, value, icon: Icon, trend }: StatCardProps) {
 - No inline styles — Tailwind classes only
 - No hardcoded colors or arbitrary Tailwind values
 - If the component grows beyond ~80 lines, split into sub-components in the same file
+- If the component depends on async data, show a skeleton placeholder while loading — never render a "guess" that will change
+- If the component reads a client preference that affects layout (e.g. collapsed state), use cookie-based SSR — see `apps/frontend/CLAUDE.md` § "Layout Shift Prevention"
+- For animation-gated visibility, use `onTransitionEnd` — never `setTimeout`
 
 ---
 

@@ -23,6 +23,7 @@ Always read:
 - Never call APIs directly in components — use services + hooks
 - Never invent new patterns — follow existing ones
 - Never use arbitrary Tailwind values (e.g. `mt-[18px]`)
+- Never use `useEffect`/`useLayoutEffect` to read localStorage for layout-affecting state — use cookie-based SSR instead (see `apps/frontend/CLAUDE.md` § "Layout Shift Prevention")
 
 ## Consistency over creativity
 
